@@ -1,0 +1,73 @@
+name: Build and Release VST3
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            artifact_name: Linux-VST3
+            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
+            ext: so
+          - os: windows-latest
+            artifact_name: Windows-VST3
+            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
+            ext: vst3
+          - os: macos-latest
+            artifact_name: MacOS-VST3
+            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
+            ext: vst3
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libx11-dev libxinerama-dev libxext-dev libfreetype6-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev libcurl4-openssl-dev
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release --parallel 4
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ${{ matrix.path }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Zip Artifacts
+      run: |
+        cd artifacts
+        for d in */; do
+          zip -r "${d%/}.zip" "$d"
+        done
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: artifacts/*.zip
+        generate_release_notes: true

@@ -1,0 +1,7 @@
+build_release/
+build/
+JuceLibraryCode/
+THE_MIDS_ROOM_artefacts/
+.DS_Store
+*.swp
+*.tmp

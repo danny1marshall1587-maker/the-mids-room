@@ -1,4 +1,4 @@
-name: Build and Release VST3
+name: Build and Release Plugins
 
 on:
   push:
@@ -17,17 +17,14 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            artifact_name: Linux-VST3
-            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
-            ext: so
+            artifact_name: Linux-Plugins
+            path: build/THE_MIDS_ROOM_artefacts/Release
           - os: windows-latest
-            artifact_name: Windows-VST3
-            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
-            ext: vst3
+            artifact_name: Windows-Plugins
+            path: build/THE_MIDS_ROOM_artefacts/Release
           - os: macos-latest
-            artifact_name: MacOS-VST3
-            path: build/THE_MIDS_ROOM_artefacts/Release/VST3
-            ext: vst3
+            artifact_name: MacOS-Plugins
+            path: build/THE_MIDS_ROOM_artefacts/Release
 
     steps:
     - uses: actions/checkout@v4

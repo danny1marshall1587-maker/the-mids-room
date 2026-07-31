@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
+
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "" FORCE)
+endif()
+
 project(THE_MIDS_ROOM VERSION 1.0.0)
 
 # Fetch JUCE
@@ -6,7 +12,7 @@ include(FetchContent)
 FetchContent_Declare(
     juce
     GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-    GIT_TAG 7.0.5 # Using the same version as the previous project for consistency
+    GIT_TAG 8.0.12
 )
 FetchContent_MakeAvailable(juce)
 
@@ -33,7 +39,7 @@ target_sources(THE_MIDS_ROOM
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE 
-    $<$<CONFIG:Release>:-O3 -march=native -ffast-math>
+    $<$<CONFIG:Release>:-O3 -ffast-math>
 )
 
 target_compile_definitions(THE_MIDS_ROOM

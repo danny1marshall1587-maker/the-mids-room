@@ -5,7 +5,7 @@ if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "" FORCE)
 endif()
 
-project(THE_MIDS_ROOM VERSION 1.0.0)
+project(THE_MIDS_ROOM VERSION 2.0.0)
 
 # Fetch JUCE
 include(FetchContent)
@@ -26,7 +26,7 @@ juce_add_plugin(THE_MIDS_ROOM
     COPY_PLUGIN_AFTER_BUILD TRUE
     PLUGIN_MANUFACTURER_CODE Juce
     PLUGIN_CODE MidR
-    FORMATS VST3 AU LV2 Standalone
+    FORMATS VST3 AU Standalone
     PRODUCT_NAME "THE MIDS ROOM"
 )
 
